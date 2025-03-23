@@ -4,12 +4,10 @@
 
 TinyForge is a high-performance URL shortener built with Node.js, Express, PostgreSQL, Redis, and Nginx, designed for scalability and efficiency. It converts long URLs into short, shareable links while tracking analytics such as the number of visits.
 
-✅ Built for Speed – Uses Redis caching to serve frequent requests quickly.
-✅ Scalable – Shards the database across multiple PostgreSQL instances.
-✅ Resilient – Nginx load balances traffic across backend instances.
+✅ Built for Speed – Uses Redis caching to serve frequent requests quickly.  
+✅ Scalable – Shards the database across multiple PostgreSQL instances.  
+✅ Resilient – Nginx load balances traffic across backend instances.  
 ✅ Simple API – No frontend, just cURL-based interaction for now.
-
-Here's an improved explanation of **TinyForge**, including details about **count cache, recently used cache, sharding, hashing, load balancing, retrieval**, and a **step-by-step guide to using it via cURL**.
 
 ---
 
@@ -33,9 +31,6 @@ TinyForge uses **two types of caching strategies** to enhance performance:
 
 Every time a short URL is accessed, we increment the **click counter** in Redis. Instead of hitting the database for each request, we store **click counts in Redis** and periodically sync them to PostgreSQL.
 
-✅ **Fast retrieval** – Avoids database hits for frequently accessed URLs.  
-✅ **Efficient tracking** – Keeps an up-to-date count of visits in memory.
-
 ```js
 // Increment click count in Redis
 async function incrementClickCount(shortUrl) {
@@ -46,9 +41,6 @@ async function incrementClickCount(shortUrl) {
 #### **🟢 Recently Used Cache (Redis) – Stores Popular URLs**
 
 TinyForge keeps a **hot cache** of frequently accessed URLs in Redis, reducing database lookups.
-
-✅ **Faster URL resolution** – Redirects without querying PostgreSQL.  
-✅ **LRU Eviction** – If Redis is full, least-used URLs get removed first.
 
 ```js
 // Store shortened URL in Redis cache
@@ -69,8 +61,6 @@ Instead of a single database, **TinyForge uses multiple database shards** to dis
 2️⃣ The hash determines which PostgreSQL instance (shard) will store it.  
 3️⃣ Requests query the **correct shard** based on the hashed value.
 
-**Example Hashing Logic** (Modulo-based sharding):
-
 ```js
 const shards = [
     "postgres://user:pass@shard1/db",
@@ -87,22 +77,11 @@ function getShard(shortUrl) {
 }
 ```
 
-✅ **Even Distribution** – URLs are evenly spread across shards.  
-✅ **Parallel Queries** – Multiple shards handle requests simultaneously.
-
 ---
 
 ### **4️⃣ Load Balancing with Nginx**
 
 TinyForge uses **NGINX** to distribute traffic across multiple backend instances.
-
-#### **🔵 How Load Balancer Works**
-
-1️⃣ Nginx sits in front of multiple Node.js instances.  
-2️⃣ It **distributes requests** to different instances based on **Round Robin** or **Least Connections** strategy.
-
-✅ **Prevents overload** on a single server.  
-✅ **Handles high traffic efficiently**.
 
 ```nginx
 # Nginx load balancing config
@@ -186,9 +165,6 @@ services:
             - "80:80"
 ```
 
-✅ **Easily scalable** – Add more instances if traffic increases.  
-✅ **Microservices-friendly** – Each service is independently managed.
-
 ---
 
 ## **📌 Setting Up Environment Variables**
@@ -230,21 +206,6 @@ curl -X GET http://localhost:5000/abc123
 ✅ **Response:** `302 Redirect to https://example.com`
 
 ---
-
-### **3️⃣ Get Analytics (Click Count)**
-
-```sh
-curl -X GET http://localhost:5000/stats/abc123
-```
-
-✅ **Response:** `{ "clicks": 25, "originalUrl": "https://example.com" }`
-
----
-
--   **Backend (Node.js & Express)**: Handles URL shortening, redirection, and analytics.
--   **Database (PostgreSQL)**: Stores original URLs, short codes, and request metadata.
--   **Count Cache (Redis)**: Used for fast lookups and storing frequently accessed URLs.
--   **Reverse Proxy (NGINX)**: Load balances traffic across multiple backend instances.
 
 ### **2. Project Structure**
 
