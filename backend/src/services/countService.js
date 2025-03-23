@@ -1,6 +1,5 @@
 import redis from "../config/redis.js";
 
-// Unique counter key for each server (shard range 0-1M, etc.)
 const COUNTER_KEY = "url-counter";
 
 const base62Chars =

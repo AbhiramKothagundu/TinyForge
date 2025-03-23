@@ -12,7 +12,7 @@ export const shortenUrl = async (req, res) => {
         const newEntry = await createShortUrl(shortUrl, longUrl);
         res.json({ shortUrl, longUrl: newEntry.long_url });
     } catch (error) {
-        console.error("Error in shortenUrl:", error); // Add this line
+        console.error("Error in shortenUrl:", error);
         res.status(500).json({ error: "Server error" });
     }
 };
@@ -26,7 +26,7 @@ export const redirectUrl = async (req, res) => {
         }
         res.status(404).json({ error: "Not found" });
     } catch (error) {
-        console.error("Error in redirectUrl:", error); // Add this line
+        console.error("Error in redirectUrl:", error);
         res.status(500).json({ error: "Server error" });
     }
 };

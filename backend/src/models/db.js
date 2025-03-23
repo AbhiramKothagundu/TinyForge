@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const { Pool } = pkg;
 
+//retry connection to database
 const retryConnect = async (config, retries = 5, delay = 5000) => {
     while (retries > 0) {
         try {
@@ -26,7 +27,6 @@ const retryConnect = async (config, retries = 5, delay = 5000) => {
     );
 };
 
-// Initialize all shards with retry mechanism
 const shardConfigs = [
     process.env.DATABASE_URL_1,
     process.env.DATABASE_URL_2,
